@@ -1,0 +1,53 @@
+#include <cstddef>
+#include <optional>
+#include <unordered_map>
+#include <utility>
+#include <vector>
+
+std::optional<std::pair<std::size_t, std::size_t>>
+findPairSumIndices(const std::vector<int>& numbers, int target) {
+    std::unordered_map<int, std::size_t> indexByValue;
+    indexByValue.reserve(numbers.size());
+
+    for (std::size_t currentIndex = 0;
+         currentIndex < numbers.size();
+         ++currentIndex) {
+
+        const int currentValue = numbers[currentIndex];
+        const int requiredValue = target - currentValue;
+
+        const auto match = indexByValue.find(requiredValue);
+
+        if (match != indexByValue.end()) {
+            return std::pair{
+                match->second,
+                currentIndex
+            };
+        }
+
+        indexByValue[currentValue] = currentIndex;
+    }
+
+    return std::nullopt;
+}
+
+#include <iostream>
+
+int main() {
+    const std::vector<int> numbers{2, 7, 11, 15};
+    const int target = 9;
+
+    const auto result = findPairSumIndices(numbers, target);
+
+    if (result.has_value()) {
+        const auto [firstIndex, secondIndex] = *result;
+
+        std::cout << "Indices: "
+                  << firstIndex << ", "
+                  << secondIndex << '\n';
+    } else {
+        std::cout << "No matching pair found\n";
+    }
+
+    return 0;
+}
