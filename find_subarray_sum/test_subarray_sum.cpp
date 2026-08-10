@@ -1,6 +1,8 @@
 #include <cassert>
 #include <vector>
 
+#include "subarray_sum_optimized.cpp"
+
 void testSubarraySumEqualsK() {
     {
         const std::vector<int> nums{1, 1, 1};
@@ -49,4 +51,9 @@ void testSubarraySumEqualsK() {
             subarraySumEqualsK(nums, 0) == 0
         );
     }
+}
+
+int main() {
+    testSubarraySumEqualsK();
+    return 0;
 }

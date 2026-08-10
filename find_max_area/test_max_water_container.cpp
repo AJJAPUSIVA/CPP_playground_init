@@ -1,6 +1,8 @@
 #include <cassert>
 #include <vector>
 
+#include "max_water_container.cpp"
+
 void testMaxWaterContainer() {
     {
         const std::vector<int> height{
@@ -45,4 +47,9 @@ void testMaxWaterContainer() {
 
         assert(maxWaterContainer(height) == 0);
     }
+}
+
+int main() {
+    testMaxWaterContainer();
+    return 0;
 }
