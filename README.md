@@ -255,6 +255,57 @@ All test files include their corresponding solution via `#include "solution.cpp"
 
 ---
 
+## find_sliding_window_maximum
+
+**Problem:** Given an array of integers and a window size k, return the maximum value in each sliding window of size k as it moves from left to right.
+
+**LeetCode:** [239. Sliding Window Maximum](https://leetcode.com/problems/sliding-window-maximum/)
+
+| File | Approach | Time | Space |
+|------|----------|------|-------|
+| `sliding_window_maximum_brute_force.cpp` | Scan each window for the max | O(nk) | O(1)* |
+| `sliding_window_maximum_deque.cpp` | Monotonic decreasing deque of indices | O(n) | O(k) |
+| `sliding_window_maximum_clean.cpp` | Compact deque version | O(n) | O(k) |
+| `sliding_window_maximum_multiset.cpp` | `std::multiset` ordered container | O(n log k) | O(k) |
+| `sliding_window_maximum_sparse_table.cpp` | Precomputed sparse table, O(1) queries | O(n log k) build, O(n) query | O(n log k) |
+| `test_sliding_window_maximum.cpp` | Test cases | — | — |
+
+*Excluding output array.
+
+**Mid/Senior Notes:**
+- The **monotonic deque** is the canonical O(n) solution. It stores indices in decreasing order of value. Front = current max. Back-pop any element ≤ the incoming one (they're permanently useless).
+- Each index is pushed once and popped at most once → amortized O(1) per element, O(n) total.
+- The `multiset` approach is simpler (insert, erase, grab `rbegin()`) but O(n log k) — good fallback in interviews.
+- Sparse table is overkill for a single k but useful for range-max queries on static arrays with varying query ranges.
+- The `<=` in the back-pop condition means equal elements get replaced — the newer one lives longer in the window.
+
+---
+
+## find_sort_colors_in_place
+
+**Problem:** Given an array with values 0, 1, and 2 (representing red, white, blue), sort them in-place so all 0s come first, then 1s, then 2s.
+
+**LeetCode:** [75. Sort Colors](https://leetcode.com/problems/sort-colors/)
+
+| File | Approach | Time | Space |
+|------|----------|------|-------|
+| `sort_colors_brute_force.cpp` | `std::sort` (comparison sort) | O(n log n) | O(log n) |
+| `sort_colors_counting.cpp` | Count each color, overwrite | O(n) | O(1) |
+| `sort_colors_two_pass.cpp` | Swap 0s to front, then swap 1s | O(n) | O(1) |
+| `sort_colors_dutch_flag.cpp` | Dutch National Flag (3 pointers) | O(n) | O(1) |
+| `sort_colors_dutch_flag_clean.cpp` | Compact Dutch Flag variant | O(n) | O(1) |
+| `sort_colors_overwrite.cpp` | Three cascading write pointers | O(n) | O(1) |
+| `test_sort_colors.cpp` | Test cases | — | — |
+
+**Mid/Senior Notes:**
+- **Dutch National Flag** (Dijkstra's algorithm) is the canonical single-pass solution. Three pointers partition into: `[0s | 1s | unprocessed | 2s]`.
+- Key subtlety: when swapping with `high`, don't advance `mid` — the swapped-in element is unprocessed. When swapping with `low`, advance `mid` because `low` only contains a processed `1` (or `mid == low`).
+- The counting approach requires two passes; interviewers often specifically ask for single-pass.
+- The overwrite approach avoids swaps entirely — writing a `0` cascades writes of `2`, `1`, `0` at their respective pointers.
+- Generalizes to k-way partitioning, but for exactly 3 values Dutch Flag is optimal.
+
+---
+
 ## Patterns Summary
 
 | Pattern | Problems |
@@ -262,6 +313,8 @@ All test files include their corresponding solution via `#include "solution.cpp"
 | **Hash Map Lookup** | Two Sum, Subarray Sum |
 | **Two Pointers** | 3Sum, Container With Most Water, Sorted Two Sum |
 | **Sliding Window** | Longest Unique Substring, Character Replacement, Minimum Window |
+| **Monotonic Deque** | Sliding Window Maximum |
 | **Prefix Sum** | Subarray Sum, Product Except Self, Maximum Subarray |
 | **Kadane's Algorithm** | Maximum Subarray Sum |
 | **Read/Write Pointer** | Move Zeroes |
+| **Dutch National Flag** | Sort Colors |
